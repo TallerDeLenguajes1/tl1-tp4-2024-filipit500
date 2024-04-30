@@ -31,9 +31,13 @@ int main()
     Nodo *TareasRealizadas = crearListaVacia();
     while(opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4){
         printf("1: cargar tareas\n");
+        printf("--------------------------------------\n");
         printf("2: mostrar tareas\n");
+        printf("--------------------------------------\n");
         printf("3:modificar estado de las tareas\n");
+        printf("--------------------------------------\n");
         printf("4: buscar por id o palabra clave\n");
+        printf("--------------------------------------\n");
         printf("eliga una opcion:");
         fflush(stdin);
         scanf("%d",&opcion);
@@ -41,16 +45,16 @@ int main()
             case 1:
             while(opcion2 == 1){
             insertarNodo(&TareasPendientes,crearNodo(&id_autoincremental));
-            printf("1: para cargar otra tarea\n");
+            printf("1:cargar otra tarea -- otro: no cargar mas tareas\n");
             fflush(stdin);
             scanf("%d",&opcion2);
             }
             opcion2 = 1;
             break;
             case 2:
-            printf("******TAREAS PENDIENTES******\n");
+            printf("**********TAREAS PENDIENTES**********\n");
             mostrarNodos(&TareasPendientes);
-            printf("******TAREAS REALIZADAS******\n");
+            printf("**********TAREAS REALIZADAS**********\n");
             mostrarNodos(&TareasRealizadas);
             break;
             case 3:
@@ -106,6 +110,7 @@ void insertarNodo(Nodo **start, Nodo *nodo)
 
 void mostrarNodos(Nodo **start)
 {
+    printf("\n");
     if(*start == NULL){
         printf("----------LA LISTA ESTA VACIA------\n");
     }
@@ -116,9 +121,11 @@ void mostrarNodos(Nodo **start)
         printf("descripcion: ");
         puts(Aux->T.Descripcion);
         printf("duracion: %d\n", Aux->T.Duracion);
+        printf("--------------------------------------\n");
         Aux = Aux->Siguiente;
     }
     }
+    printf("\n");
 }
 
 Nodo buscarNodo(Nodo **start, int idBuscado)
@@ -230,11 +237,14 @@ void consultarPorIdTarea(Nodo **tareasPendientes,Nodo **tareasRealizadas)
 
 void liberarMemoria(Nodo **start)
 {
-    Nodo *Aux = *start;
-    while(Aux != NULL){
-        Nodo *temp = Aux;
-        Aux = Aux->Siguiente;
+    Nodo **Aux = start;
+    Nodo *temp;
+    while(*Aux != NULL){
+        temp = *Aux;
+        *Aux = (*Aux)->Siguiente;
         free(temp->T.Descripcion);
+        if(temp != NULL){
         free(temp);
+        }
     }
 }
