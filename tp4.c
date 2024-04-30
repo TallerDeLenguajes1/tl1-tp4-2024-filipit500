@@ -21,6 +21,7 @@ void mostrarNodos(Nodo **start);
 Nodo buscarNodo(Nodo **start, int idBuscado);
 void eliminarNodo(Nodo **start,int idBuscado);
 void consultarPorIdTarea(Nodo **tareasPendientes,Nodo **tareasRealizadas);
+void liberarMemoria(Nodo **start);
 
 
 int main()
@@ -67,6 +68,8 @@ int main()
             break;
         }
     }
+    liberarMemoria(&TareasPendientes);
+    liberarMemoria(&TareasRealizadas);
     return 0;
 }
 
@@ -223,6 +226,15 @@ void consultarPorIdTarea(Nodo **tareasPendientes,Nodo **tareasRealizadas)
         }
         
     }
-    
-    
+}
+
+void liberarMemoria(Nodo **start)
+{
+    Nodo *Aux = *start;
+    while(Aux != NULL){
+        Nodo *temp = Aux;
+        Aux = Aux->Siguiente;
+        free(temp->T.Descripcion);
+        free(temp);
+    }
 }
