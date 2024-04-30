@@ -27,8 +27,9 @@ int main()
     int id_autoincremental = 1000,opcion = 1,opcion2 = 1;
     Nodo *TareasPendientes = crearListaVacia();
     Nodo *TareasRealizadas = crearListaVacia();
-    while(opcion == 1){
+    while(opcion == 1 || opcion == 2){
         printf("1: cargar tareas\n");
+        printf("2: mostrar tareas\n");
         printf("eliga una opcion:");
         fflush(stdin);
         scanf("%d",&opcion);
@@ -40,8 +41,12 @@ int main()
             fflush(stdin);
             scanf("%d",&opcion2);
             }
+            break;
+            case 2:
+            printf("******TAREAS PENDIENTES******\n");
             mostrarNodos(&TareasPendientes);
-            
+            printf("******TAREAS REALIZADAS******\n");
+            mostrarNodos(&TareasRealizadas);
         }
     }
 }
@@ -79,6 +84,10 @@ void insertarNodo(Nodo **start, Nodo *nodo)
 
 void mostrarNodos(Nodo **start)
 {
+    if(*start == NULL){
+        printf("----------LA LISTA ESTA VACIA------\n");
+    }
+    else{
     Nodo *Aux = *start;
     while(Aux != NULL){
         printf("id: %d\n", Aux->T.TareaID);
@@ -86,6 +95,7 @@ void mostrarNodos(Nodo **start)
         puts(Aux->T.Descripcion);
         printf("duracion: %d\n", Aux->T.Duracion);
         Aux = Aux->Siguiente;
+    }
     }
 }
 
