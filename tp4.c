@@ -20,6 +20,7 @@ void insertarNodo(Nodo **start, Nodo *nodo);
 void mostrarNodos(Nodo **start);
 Nodo buscarNodo(Nodo **start, int idBuscado);
 void eliminarNodo(Nodo **start,int idBuscado);
+void consultarPorIdTarea(Nodo **tareasPendientes,Nodo **tareasRealizadas);
 
 
 int main()
@@ -27,10 +28,11 @@ int main()
     int id_autoincremental = 1000,opcion = 1,opcion2 = 1,id_buscado;
     Nodo *TareasPendientes = crearListaVacia();
     Nodo *TareasRealizadas = crearListaVacia();
-    while(opcion == 1 || opcion == 2 || opcion == 3){
+    while(opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4){
         printf("1: cargar tareas\n");
         printf("2: mostrar tareas\n");
         printf("3:modificar estado de las tareas\n");
+        printf("4: buscar por id o palabra clave\n");
         printf("eliga una opcion:");
         fflush(stdin);
         scanf("%d",&opcion);
@@ -42,6 +44,7 @@ int main()
             fflush(stdin);
             scanf("%d",&opcion2);
             }
+            opcion2 = 1;
             break;
             case 2:
             printf("******TAREAS PENDIENTES******\n");
@@ -59,8 +62,12 @@ int main()
             insertarNodo(&TareasRealizadas,&nodoEncontrado);
             eliminarNodo(&TareasPendientes,id_buscado);
             break;
+            case 4:
+            consultarPorIdTarea(&TareasPendientes,&TareasRealizadas);
+            break;
         }
     }
+    return 0;
 }
 
 
@@ -132,4 +139,90 @@ void eliminarNodo(Nodo **start,int idBuscado)
         *Aux = (*Aux)->Siguiente;
         free(Temp);
     }
+}
+
+void consultarPorIdTarea(Nodo **tareasPendientes,Nodo **tareasRealizadas)
+{
+    int opcion;
+    printf("1: buscar por palabra -- 2: buscar por id\n");
+    printf("eliga una opcion:");
+    fflush(stdin);
+    scanf("%d",&opcion);
+    if(opcion == 2){
+        int id;
+        printf("ingrese el id:");
+        fflush(stdin);
+        scanf("%d",&id);
+        Nodo * Aux = *tareasPendientes;
+        Nodo * Aux2 = *tareasRealizadas;
+        int encontro = 0;
+        while(Aux != NULL && Aux->T.TareaID != id){
+            Aux = Aux->Siguiente;
+        }
+        if(Aux != NULL){
+            encontro = 1;
+        }
+        while(Aux2 != NULL && Aux2->T.TareaID != id){
+            Aux2 = Aux2->Siguiente;
+        }
+        if(Aux2 != NULL){
+            encontro = 2;
+        }
+
+        if(encontro == 1){
+            printf("------ se encontro la tarea en pendientes ------\n");
+            printf("id: %d\n", Aux->T.TareaID);
+            printf("descripcion: ");
+            puts(Aux->T.Descripcion);
+            printf("duracion: %d\n", Aux->T.Duracion);
+        }
+        else if(encontro == 2){
+            printf("------ se encontro la tarea en Realizados ------\n");
+            printf("id: %d\n", Aux2->T.TareaID);
+            printf("descripcion: ");
+            puts(Aux2->T.Descripcion);
+            printf("duracion: %d\n", Aux2->T.Duracion);
+        }
+        else{
+            printf("NO SE ENCONTRO UNA TAREA CON ESE ID\n");
+        }
+    }
+    else if(opcion == 1){
+        Nodo * Aux1 = *tareasPendientes;
+        Nodo * Aux2 = *tareasRealizadas;
+        int encontro = 0;
+        char buff[30];
+        printf("ingrese una palabra clave:");
+        fflush(stdin);
+        gets(buff);
+        while(Aux1 != NULL){
+            if(strstr(Aux1->T.Descripcion,buff)){
+                encontro = 1;
+                printf("------SE ENCONTRO LA TAREA EN PENDIENTES ------\n");
+                printf("id: %d\n", Aux1->T.TareaID);
+                printf("descripcion: ");
+                puts(Aux1->T.Descripcion);
+                printf("duracion: %d\n", Aux1->T.Duracion);
+            }
+            Aux1 = Aux1->Siguiente;
+        }
+        while(Aux2 != NULL){
+            if(strstr(Aux2->T.Descripcion,buff)){
+                encontro = 1;
+                printf("------SE ENCONTRO LA TAREA EN REALIZADOS ------\n");
+                printf("id: %d\n", Aux2->T.TareaID);
+                printf("descripcion: ");
+                puts(Aux2->T.Descripcion);
+                printf("duracion: %d\n", Aux2->T.Duracion);
+            }
+            Aux2 = Aux2->Siguiente;
+        }
+
+        if(encontro == 0){
+            printf("NO SE ENCONTRO UNA TAREA QUE CONTENGA LA PALABRA CLAVE\n");
+        }
+        
+    }
+    
+    
 }
